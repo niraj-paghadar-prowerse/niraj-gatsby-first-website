@@ -1,42 +1,49 @@
-import * as React from "react"
-import PropTypes from "prop-types"
-import { Link } from "gatsby"
+import React from "react"
+import { Link,  useStaticQuery, graphql } from "gatsby"
+import * as headerStyles from "./header.module.scss"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
+const Header = () => {
+  const data = useStaticQuery(
+    graphql`
+      query {
+        site {
+          siteMetadata {
+            title
+            description
+          }
+        }
+      }
+    `
+  )
+  return (
+    <header className={headerStyles.header}>
+      <div className="{headerStyles.overlay}"></div>
+      <div className={headerStyles.heroContent}>
+        <p className={headerStyles.brand}>
+          <Link to="/">{data.site.siteMetadata.title}</Link>
+        </p>
+        <p className={headerStyles.description}>
+          {data.site.siteMetadata.description}
+        </p>
+      </div>
+      <nav className={headerStyles.navContainer}>
+        <ul className={headerStyles.navList}>
+          <li>
+            <Link to="/" activeClassName={headerStyles.activeMenuItem}>Home</Link>
+          </li>
+          <li>
+            <Link to="/blog/" activeClassName={headerStyles.activeMenuItem}>Blog</Link>
+          </li>
+          <li>
+            <Link to="/contact/" activeClassName={headerStyles.activeMenuItem}>Contact</Link>
+          </li>
+          <li>
+            <Link to="/about/" activeClassName={headerStyles.activeMenuItem}>About</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  )
 }
 
 export default Header
